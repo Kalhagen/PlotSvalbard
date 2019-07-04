@@ -28,7 +28,7 @@
 #' @param land.size,gla.size,bathy.size,grid.size Numeric value specifying the width of the border line for land and glacier shapes as well as the width of the grid lines, respectively. See details for explanation about line widths.
 #' @param currents logical indicating whether Arctic and Atlantic ocean currents for the Barents Sea should be plotted. See details.
 #' @param arc.col,atl.col Character code specifying the color for Arctic and Atlantic current arrows.
-#' @param current.size Either a numeric value specifying the width of ocean current arrows or "scaled" for ocean currents that are approximately scaled to their size.
+#' @param current.size Either a numeric value specifying the width of ocean current arrows or "scaled" for ocean currents that are approximately scaled to their magnitude.
 #' @param current.alpha Value between 0 and 1 defining the transparency of current arrows.
 #' @param label.print Logical indicating whether labels should be printed for polar stereographic maps.
 #' @param label.font Numeric value specifying the font size for labels in polar stereographic maps. Note that this value defines the actual font size in points, not the \code{ggplot2} font size.
@@ -144,10 +144,12 @@ if(class(legends) != "logical" | !length(legends) %in% 1:2) stop("'legends' argu
 
 if(type %in% c("arctic50", "arctic60")) stop('"arctic50" and "arctic60" map types have been replaced by basemap(type = "panarctic", limits = N), where N is any integer between 30 and 88 defining the limiting latitude.')
 
+if(!(is.numeric(current.size) | current.size == "scaled")) stop("The 'current.size' argument has to be numeric or 'scaled'. See the argument description for ?basemap")
+
 ## Automatic limits
 
 if(length(limits) == 3 & is.character(limits)) {
-    limits <- auto_limits(type, limits, limits.lon, limits.lat)
+    limits <- auto_limits(type, limits, limits.lon = limits.lon, limits.lat = limits.lat)
 }
 
 ## Automatic grid line spacing for panarctic maps
